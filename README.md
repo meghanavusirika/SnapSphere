@@ -3,7 +3,8 @@
 SnapSphere is a creative map exploration platform built for photographers, content creators, and explorers. Powered by AI, ggogle maps API and geospatial APIs, it helps you discover photo-worthy locations based on mood, aesthetics, and real-time conditions — not just reviews or popularity.
 
 ## 🌐 Video Demo
-🔗 [Coming Soon]
+Check out the video demo here:
+🔗 https://www.youtube.com/watch?v=AHVn8Na7S4w
 
 ## 🖼️ Preview
 ![Home_Page](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/HomePage.png)
