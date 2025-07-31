@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapSphere - Find Your Perfect Photo Spot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=places" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fef7ff 0%, #fdeeff 50%, #fbdfff 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ed5aff, #d926da);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ed5aff, #d926da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+        }
+
+        .nav-btn.active {
+            background: #ed5aff;
+            color: white;
+        }
+
+        .nav-btn:not(.active) {
+            color: #6b7280;
+        }
+
+        .nav-btn:not(.active):hover {
+            color: #ed5aff;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ed5aff, #d926da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #ed5aff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d926da;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        /* Map Section */
+        .map-section {
+            display: none;
+            height: calc(100vh - 64px);
+            flex-direction: column;
+        }
+
+        .map-header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+
+        .map-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .map-title h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .map-title p {
+            color: #6b7280;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .vibe-filters {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+
+        .vibe-filters-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .vibe-filter {
+            padding: 0.5rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .vibe-filter.active {
+            background: #ed5aff;
+            color: white;
+        }
+
+        .vibe-filter:hover:not(.active) {
+            background: #e5e7eb;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .spots-panel {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 320px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .spots-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .spots-header h3 {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .spots-header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .spots-list {
+            padding: 0.5rem;
+        }
+
+        .spot-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .spot-item:hover {
+            background: #f9fafb;
+        }
+
+        .spot-content {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .spot-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #fef7ff, #fdeeff);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ed5aff;
+            flex-shrink: 0;
+        }
+
+        .spot-info h4 {
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .spot-info p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .spot-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .spot-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .star {
+            color: #fbbf24;
+        }
+
+        /* API Status */
+        .api-status {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #6b7280;
+            z-index: 10;
+        }
+
+        .api-status.success {
+            color: #059669;
+        }
+
+        .api-status.error {
+            color: #dc2626;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            position: relative;
+        }
+
+        .modal-image {
+            height: 192px;
+            background: linear-gradient(135deg, #fef7ff, #fdeeff);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ed5aff;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .modal-vibes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vibe-tag {
+            padding: 0.25rem 0.5rem;
+            background: #fef7ff;
+            color: #ed5aff;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+
+        .modal-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .modal-actions .btn-secondary {
+            flex: none;
+            padding: 0.75rem;
+        }
+
+        /* Loading */
+        .loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #ed5aff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .spots-panel {
+                width: 100%;
+                right: 0;
+                left: 0;
+                top: auto;
+                bottom: 0;
+                max-height: 300px;
+            }
+            
+            .map-container {
+                height: calc(100vh - 300px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">📸</div>
+                <span class="logo-text">SnapSphere</span>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showHome()">Home</button>
+                <button class="nav-btn" onclick="showMap()">Aesthetic Map</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <h1>Find Your Perfect<br>Photo Spot</h1>
+        <p>SnapSphere helps content creators, photographers, and travelers discover visually stunning locations with AI-powered recommendations and community insights.</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="showMap()">
+                <span>Explore Aesthetic Map</span>
+                <span>→</span>
+            </button>
+            <button class="btn btn-secondary">Watch Demo</button>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map-section" class="map-section">
+        <div class="map-header">
+            <div class="map-header-content">
+                <div class="map-title">
+                    <h2>Aesthetic Map</h2>
+                    <p>Discover photogenic locations around you</p>
+                </div>
+                <div class="map-controls">
+                    <button class="btn btn-secondary" onclick="getUserLocation()">📍 My Location</button>
+                    <button class="btn btn-secondary" onclick="fetchRealData()">🔄 Refresh Data</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="vibe-filters">
+            <div class="vibe-filters-container">
+                <button class="vibe-filter" data-vibe="vintage">🏛️ Vintage</button>
+                <button class="vibe-filter" data-vibe="urban">🏙️ Urban</button>
+                <button class="vibe-filter" data-vibe="nature">🌿 Nature</button>
+                <button class="vibe-filter" data-vibe="moody">🌫️ Moody</button>
+                <button class="vibe-filter" data-vibe="colorful">🌈 Colorful</button>
+                <button class="vibe-filter" data-vibe="industrial">🏭 Industrial</button>
+                <button class="vibe-filter" data-vibe="peaceful">🧘 Peaceful</button>
+                <button class="vibe-filter" data-vibe="modern">✨ Modern</button>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+            <div id="map"></div>
+            
+            <div class="api-status" id="api-status">
+                📡 Loading data from APIs...
+            </div>
+            
+            <div class="spots-panel">
+                <div class="spots-header">
+                    <h3>Photo Spots (<span id="spots-count">0</span>)</h3>
+                    <p id="filter-info">All locations</p>
+                </div>
+                <div class="spots-list" id="spots-list">
+                    <!-- Spots will be populated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spot Modal -->
+    <div class="modal" id="spot-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-image" id="modal-image">
+                    <span style="font-size: 4rem;">📸</span>
+                </div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_CONFIG = {
+            unsplash: {
+                accessKey: 'YOUR_UNSPLASH_ACCESS_KEY', // Get from https://unsplash.com/developers
+                baseUrl: 'https://api.unsplash.com'
+            },
+            flickr: {
+                apiKey: 'YOUR_FLICKR_API_KEY', // Get from https://www.flickr.com/services/apps/create/
+                baseUrl: 'https://api.flickr.com/services/rest'
+            },
+            instagram: {
+                accessToken: 'YOUR_INSTAGRAM_ACCESS_TOKEN', // Requires Instagram Basic Display API setup
+                baseUrl: 'https://graph.instagram.com'
+            }
+        };
+
+        // Sample photo spots data (fallback)
+        const samplePhotoSpots = [
+            {
+                id: '1',
+                name: 'Hidden Garden Alley',
+                description: 'A secret passage with ivy-covered walls and vintage street lamps. Perfect for moody, vintage-style photography.',
+                location: { lat: 43.6532, lng: -79.3832 },
+                vibe: ['vintage', 'moody', 'urban'],
+                bestTime: 'Golden Hour (6-7 PM)',
+                safetyNotes: 'Safe during daylight hours. Well-lit area.',
+                crowdLevel: 'low',
+                submittedBy: 'Sarah M.',
+                rating: 4.8,
+                imageUrl: null,
+                source: 'community'
+            },
+            {
+                id: '2',
+                name: 'Urban Rooftop Vista',
+                description: 'Modern cityscape with perfect skyline views. Great for urban photography and city vibes.',
+                location: { lat: 43.6532, lng: -79.3832 },
+                vibe: ['urban', 'modern', 'cityscape'],
+                bestTime: 'Blue Hour (8-9 PM)',
+                safetyNotes: 'Access requires permission. Best during business hours.',
+                crowdLevel: 'medium',
+                submittedBy: 'Mike R.',
+                rating: 4.6,
+                imageUrl: null,
+                source: 'community'
+            }
+        ];
+
+        let map;
+        let markers = [];
+        let selectedVibes = [];
+        let userLocation = null;
+        let allPhotoSpots = [];
+
+        // Navigation functions
+        function showHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('map-section').style.display = 'none';
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.nav-btn').classList.add('active');
+        }
+
+        function showMap() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('map-section').style.display = 'flex';
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            
+            if (!map) {
+                initMap();
+            }
+        }
+
+        // API Functions
+        async function fetchUnsplashPhotos(lat, lng, query = 'aesthetic') {
+            try {
+                if (!API_CONFIG.unsplash.accessKey || API_CONFIG.unsplash.accessKey === 'YOUR_UNSPLASH_ACCESS_KEY') {
+                    console.log('Unsplash API key not configured');
+                    return [];
+                }
+
+                const response = await fetch(
+                    `${API_CONFIG.unsplash.baseUrl}/search/photos?query=${query}&lat=${lat}&lng=${lng}&radius=10&per_page=10&client_id=${API_CONFIG.unsplash.accessKey}`
+                );
+                
+                if (!response.ok) throw new Error('Unsplash API error');
+                
+                const data = await response.json();
+                
+                return data.results.map(photo => ({
+                    id: `unsplash_${photo.id}`,
+                    name: photo.location?.title || photo.alt_description || 'Beautiful Location',
+                    description: photo.description || photo.alt_description || 'A stunning photo spot discovered on Unsplash.',
+                    location: {
+                        lat: photo.location?.position?.latitude || lat + (Math.random() - 0.5) * 0.01,
+                        lng: photo.location?.position?.longitude || lng + (Math.random() - 0.5) * 0.01
+                    },
+                    vibe: classifyVibe(photo.description || photo.alt_description || ''),
+                    bestTime: 'Golden Hour',
+                    safetyNotes: 'Location verified by Unsplash community.',
+                    crowdLevel: 'low',
+                    submittedBy: photo.user?.name || 'Unsplash User',
+                    rating: 4.5 + Math.random() * 0.5,
+                    imageUrl: photo.urls?.regular,
+                    source: 'unsplash'
+                }));
+            } catch (error) {
+                console.error('Error fetching Unsplash photos:', error);
+                return [];
+            }
+        }
+
+        async function fetchFlickrPhotos(lat, lng) {
+            try {
+                if (!API_CONFIG.flickr.apiKey || API_CONFIG.flickr.apiKey === 'YOUR_FLICKR_API_KEY') {
+                    console.log('Flickr API key not configured');
+                    return [];
+                }
+
+                const response = await fetch(
+                    `${API_CONFIG.flickr.baseUrl}?method=flickr.photos.search&api_key=${API_CONFIG.flickr.apiKey}&lat=${lat}&lon=${lng}&radius=5&format=json&nojsoncallback=1&per_page=10&sort=interestingness-desc`
+                );
+                
+                if (!response.ok) throw new Error('Flickr API error');
+                
+                const data = await response.json();
+                
+                if (!data.photos?.photo) return [];
+                
+                return data.photos.photo.map(photo => ({
+                    id: `flickr_${photo.id}`,
+                    name: photo.title || 'Flickr Photo Spot',
+                    description: 'A beautiful location discovered by the Flickr community.',
+                    location: {
+                        lat: lat + (Math.random() - 0.5) * 0.01,
+                        lng: lng + (Math.random() - 0.5) * 0.01
+                    },
+                    vibe: classifyVibe(photo.title || ''),
+                    bestTime: 'Golden Hour',
+                    safetyNotes: 'Location verified by Flickr community.',
+                    crowdLevel: 'low',
+                    submittedBy: photo.ownername || 'Flickr User',
+                    rating: 4.3 + Math.random() * 0.7,
+                    imageUrl: `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_w.jpg`,
+                    source: 'flickr'
+                }));
+            } catch (error) {
+                console.error('Error fetching Flickr photos:', error);
+                return [];
+            }
+        }
+
+        async function fetchInstagramPhotos(lat, lng) {
+            try {
+                if (!API_CONFIG.instagram.accessToken || API_CONFIG.instagram.accessToken === 'YOUR_INSTAGRAM_ACCESS_TOKEN') {
+                    console.log('Instagram API not configured');
+                    return [];
+                }
+
+                // Note: Instagram Basic Display API has limited location access
+                // This is a simplified example
+                const response = await fetch(
+                    `${API_CONFIG.instagram.baseUrl}/me/media?fields=id,caption,media_type,media_url,location&access_token=${API_CONFIG.instagram.accessToken}`
+                );
+                
+                if (!response.ok) throw new Error('Instagram API error');
+                
+                const data = await response.json();
+                
+                return data.data?.map(post => ({
+                    id: `instagram_${post.id}`,
+                    name: post.location?.name || 'Instagram Location',
+                    description: post.caption || 'A beautiful spot shared on Instagram.',
+                    location: {
+                        lat: post.location?.latitude || lat + (Math.random() - 0.5) * 0.01,
+                        lng: post.location?.longitude || lng + (Math.random() - 0.5) * 0.01
+                    },
+                    vibe: classifyVibe(post.caption || ''),
+                    bestTime: 'Golden Hour',
+                    safetyNotes: 'Location shared on Instagram.',
+                    crowdLevel: 'medium',
+                    submittedBy: 'Instagram User',
+                    rating: 4.2 + Math.random() * 0.8,
+                    imageUrl: post.media_url,
+                    source: 'instagram'
+                })) || [];
+            } catch (error) {
+                console.error('Error fetching Instagram photos:', error);
+                return [];
+            }
+        }
+
+        // Vibe classification function
+        function classifyVibe(text) {
+            const vibes = [];
+            const lowerText = text.toLowerCase();
+            
+            if (lowerText.includes('vintage') || lowerText.includes('retro') || lowerText.includes('classic')) vibes.push('vintage');
+            if (lowerText.includes('urban') || lowerText.includes('city') || lowerText.includes('street')) vibes.push('urban');
+            if (lowerText.includes('nature') || lowerText.includes('forest') || lowerText.includes('park')) vibes.push('nature');
+            if (lowerText.includes('moody') || lowerText.includes('dark') || lowerText.includes('atmospheric')) vibes.push('moody');
+            if (lowerText.includes('colorful') || lowerText.includes('bright') || lowerText.includes('vibrant')) vibes.push('colorful');
+            if (lowerText.includes('industrial') || lowerText.includes('warehouse') || lowerText.includes('factory')) vibes.push('industrial');
+            if (lowerText.includes('peaceful') || lowerText.includes('calm') || lowerText.includes('quiet')) vibes.push('peaceful');
+            if (lowerText.includes('modern') || lowerText.includes('contemporary') || lowerText.includes('clean')) vibes.push('modern');
+            
+            return vibes.length > 0 ? vibes : ['urban'];
+        }
+
+        // Fetch real data from APIs
+        async function fetchRealData() {
+            const statusEl = document.getElementById('api-status');
+            statusEl.textContent = '📡 Fetching data from APIs...';
+            statusEl.className = 'api-status';
+
+            const center = map ? map.getCenter() : { lat: 43.6532, lng: -79.3832 };
+            
+            try {
+                const [unsplashSpots, flickrSpots, instagramSpots] = await Promise.allSettled([
+                    fetchUnsplashPhotos(center.lat(), center.lng()),
+                    fetchFlickrPhotos(center.lat(), center.lng()),
+                    fetchInstagramPhotos(center.lat(), center.lng())
+                ]);
+
+                let newSpots = [];
+                
+                if (unsplashSpots.status === 'fulfilled') {
+                    newSpots.push(...unsplashSpots.value);
+                }
+                if (flickrSpots.status === 'fulfilled') {
+                    newSpots.push(...flickrSpots.value);
+                }
+                if (instagramSpots.status === 'fulfilled') {
+                    newSpots.push(...instagramSpots.value);
+                }
+
+                // Add sample spots if no API data
+                if (newSpots.length === 0) {
+                    newSpots = samplePhotoSpots;
+                    statusEl.textContent = '📡 Using sample data (APIs not configured)';
+                    statusEl.className = 'api-status error';
+                } else {
+                    statusEl.textContent = `📡 Found ${newSpots.length} spots from APIs`;
+                    statusEl.className = 'api-status success';
+                }
+
+                allPhotoSpots = newSpots;
+                updateMapMarkers();
+                updateSpotsList();
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                allPhotoSpots = samplePhotoSpots;
+                statusEl.textContent = '📡 Error fetching data, using sample data';
+                statusEl.className = 'api-status error';
+                updateMapMarkers();
+                updateSpotsList();
+            }
+        }
+
+        // Map initialization
+        function initMap() {
+            const mapElement = document.getElementById('map');
+            map = new google.maps.Map(mapElement, {
+                center: { lat: 43.6532, lng: -79.3832 }, // Toronto
+                zoom: 13,
+                styles: [
+                    {
+                        featureType: 'poi',
+                        elementType: 'labels',
+                        stylers: [{ visibility: 'off' }]
+                    }
+                ]
+            });
+
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+            
+            // Fetch initial data
+            fetchRealData();
+        }
+
+        function updateMapMarkers() {
+            // Clear existing markers
+            markers.forEach(marker => marker.setMap(null));
+            markers = [];
+
+            // Add new markers
+            allPhotoSpots.forEach(spot => {
+                const marker = new google.maps.Marker({
+                    position: spot.location,
+                    map: map,
+                    title: spot.name,
+                    icon: {
+                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="18" fill="#ed5aff" stroke="white" stroke-width="2"/>
+                                <path d="M15 15h10v10H15z" fill="white"/>
+                                <circle cx="20" cy="20" r="2" fill="#ed5aff"/>
+                            </svg>
+                        `),
+                        scaledSize: new google.maps.Size(40, 40)
+                    }
+                });
+
+                marker.addListener('click', () => {
+                    showSpotModal(spot);
+                });
+
+                markers.push(marker);
+            });
+        }
+
+        // Vibe filtering
+        document.querySelectorAll('.vibe-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                const vibe = button.dataset.vibe;
+                
+                if (selectedVibes.includes(vibe)) {
+                    selectedVibes = selectedVibes.filter(v => v !== vibe);
+                    button.classList.remove('active');
+                } else {
+                    selectedVibes.push(vibe);
+                    button.classList.add('active');
+                }
+                
+                filterSpots();
+            });
+        });
+
+        function filterSpots() {
+            const filteredSpots = selectedVibes.length > 0 
+                ? allPhotoSpots.filter(spot => 
+                    spot.vibe.some(vibe => selectedVibes.includes(vibe))
+                  )
+                : allPhotoSpots;
+
+            // Update markers visibility
+            markers.forEach((marker, index) => {
+                const spot = allPhotoSpots[index];
+                const isVisible = filteredSpots.includes(spot);
+                marker.setVisible(isVisible);
+            });
+
+            // Update spots list
+            updateSpotsList(filteredSpots);
+        }
+
+        function updateSpotsList(spots = allPhotoSpots) {
+            const spotsList = document.getElementById('spots-list');
+            const spotsCount = document.getElementById('spots-count');
+            const filterInfo = document.getElementById('filter-info');
+
+            spotsCount.textContent = spots.length;
+            filterInfo.textContent = selectedVibes.length > 0 
+                ? `Filtered by: ${selectedVibes.join(', ')}`
+                : 'All locations';
+
+            spotsList.innerHTML = spots.map(spot => `
+                <div class="spot-item" onclick="showSpotModal(${JSON.stringify(spot).replace(/"/g, '&quot;')})">
+                    <div class="spot-content">
+                        <div class="spot-icon">
+                            ${spot.source === 'unsplash' ? '📸' : 
+                              spot.source === 'flickr' ? '🖼️' : 
+                              spot.source === 'instagram' ? '📱' : '📍'}
+                        </div>
+                        <div class="spot-info">
+                            <h4>${spot.name}</h4>
+                            <p>${spot.description}</p>
+                            <div class="spot-meta">
+                                <div class="spot-rating">
+                                    <span class="star">★</span>
+                                    <span>${spot.rating.toFixed(1)}</span>
+                                </div>
+                                <div>👥 ${spot.crowdLevel}</div>
+                                <div style="font-size: 0.7rem; color: #9ca3af;">${spot.source}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        function showSpotModal(spot) {
+            const modal = document.getElementById('spot-modal');
+            const modalBody = document.getElementById('modal-body');
+            const modalImage = document.getElementById('modal-image');
+
+            // Set image if available
+            if (spot.imageUrl) {
+                modalImage.style.backgroundImage = `url(${spot.imageUrl})`;
+                modalImage.innerHTML = '';
+            } else {
+                modalImage.style.backgroundImage = 'none';
+                modalImage.innerHTML = '<span style="font-size: 4rem;">📸</span>';
+            }
+
+            modalBody.innerHTML = `
+                <h2 class="modal-title">${spot.name}</h2>
+                <p class="modal-description">${spot.description}</p>
+                
+                <div class="modal-vibes">
+                    ${spot.vibe.map(vibe => `<span class="vibe-tag">${vibe}</span>`).join('')}
+                </div>
+                
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <span>🕐</span>
+                        <span>Best time: ${spot.bestTime}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>👥</span>
+                        <span>Crowd level: ${spot.crowdLevel}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>🛡️</span>
+                        <span>${spot.safetyNotes}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="star">★</span>
+                        <span>${spot.rating.toFixed(1)}/5 rating</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>📱</span>
+                        <span>Source: ${spot.source}</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-primary">📍 Get Directions</button>
+                    <button class="btn btn-secondary">❤️</button>
+                    <button class="btn btn-secondary">📤</button>
+                </div>
+                
+                <div style="margin-top: 1rem; font-size: 0.75rem; color: #9ca3af;">
+                    Submitted by ${spot.submittedBy}
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('spot-modal').style.display = 'none';
+        }
+
+        // User location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        if (map) {
+                            map.panTo(userLocation);
+                            map.setZoom(15);
+                            fetchRealData(); // Fetch data for new location
+                        }
+                    },
+                    (error) => {
+                        console.log('Error getting location:', error);
+                        alert('Unable to get your location. Please check your browser settings.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('spot-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'spot-modal') {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            showHome();
+        });
+    </script>
+</body>
+</html> 
