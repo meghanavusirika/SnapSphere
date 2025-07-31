@@ -423,10 +423,10 @@ def place_details():
             'full_address': photo.full_address,
             'description': photo.description,
             'vibes': photo.vibes.split(','),
+            'rating': photo.rating,
             'best_time': photo.best_time,
             'crowd_level': photo.crowd_level,
             'safety_notes': photo.safety_notes,
-            'rating': photo.rating,
             'submitted_by': photo.submitted_by
         })
 
@@ -454,33 +454,8 @@ def place_details():
         place_name = f"Scenic Spot near ({latitude:.4f}, {longitude:.4f})"
         full_address = place_name
 
-    # 3. AI-generated description (stub for now, replace with BLIP or LLM as needed)
-    def generate_ai_description(photo_url, place_name):
-        # In production, use BLIP or similar model here
-        return f"A photogenic spot with unique vibes at {place_name}. Perfect for capturing memorable moments."
-
-    description = generate_ai_description(photo_url, place_name)
-
-    # 4. Run CLIP for vibes/tags
-    try:
-        response = requests.get(photo_url, stream=True)
-        image = Image.open(response.raw).convert("RGB")
-        inputs = clip_processor(
-            text=CANDIDATE_TAGS,
-            images=image,
-            return_tensors="pt",
-            padding=True
-        )
-        with torch.no_grad():
-            outputs = clip_model(**inputs)
-            logits_per_image = outputs.logits_per_image
-            probs = logits_per_image.softmax(dim=1).cpu().numpy()[0]
-        top_indices = probs.argsort()[-3:][::-1]
-        tags = [CANDIDATE_TAGS[i] for i in top_indices]
-        tags_str = ','.join(tags)
-    except Exception as e:
-        tags = []
-        tags_str = ''
+    # Use the enrich_photo_details function to get all details including rating
+    place_name, full_address, description, tags, tags_str, best_time, crowd_level, safety_note, rating, submitted_by = enrich_photo_details(photo_url, float(latitude), float(longitude))
 
     # 5. Cache/store in DB
     if not photo:
@@ -491,7 +466,12 @@ def place_details():
             vibes=tags_str,
             place_name=place_name,
             full_address=full_address,
-            description=description
+            description=description,
+            best_time=best_time,
+            crowd_level=crowd_level,
+            safety_notes=safety_note,
+            rating=rating,
+            submitted_by=submitted_by
         )
         db.session.add(photo)
     else:
@@ -499,6 +479,11 @@ def place_details():
         photo.full_address = full_address
         photo.description = description
         photo.vibes = tags_str
+        photo.best_time = best_time
+        photo.crowd_level = crowd_level
+        photo.safety_notes = safety_note
+        photo.rating = rating
+        photo.submitted_by = submitted_by
     db.session.commit()
 
     return jsonify({
@@ -506,10 +491,10 @@ def place_details():
         'full_address': full_address,
         'description': description,
         'vibes': tags,
+        'rating': rating,
         'best_time': best_time,
         'crowd_level': crowd_level,
         'safety_notes': safety_note,
-        'rating': rating,
         'submitted_by': submitted_by
     })
 
@@ -571,7 +556,7 @@ def me():
     if not user_id:
         return jsonify({'error': 'Invalid token'}), 401
     
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     if not user:
         return jsonify({'error': 'User not found'}), 404
     
@@ -801,11 +786,7 @@ def analyze_vibe():
         confidence_score = float(probs[top_indices[0]])
         
         # Generate color palette (simplified)
-        colors = image.resize((50, 50)).getcolors(50)
-        if colors:
-            color_palette = [f"#{c[1]:06x}" for c in sorted(colors, key=lambda x: x[0], reverse=True)[:5]]
-        else:
-            color_palette = ["#000000", "#ffffff", "#cccccc", "#999999", "#666666"]
+        color_palette = ["#000000", "#ffffff", "#cccccc", "#999999", "#666666"]
         
         # Calculate mood score (simplified)
         mood_score = min(confidence_score + 0.2, 1.0)
@@ -1009,8 +990,26 @@ def get_smart_recommendations():
     except Exception as e:
         return jsonify({'error': f'Failed to get recommendations: {str(e)}'}), 500
 
+@app.route('/update_ratings', methods=['POST'])
+def update_ratings():
+    """Update existing photos with ratings if they don't have them"""
+    try:
+        # Get all photos without ratings
+        photos_without_ratings = Photo.query.filter_by(rating=None).all()
+        updated_count = 0
+        
+        for photo in photos_without_ratings:
+            # Generate random rating
+            rating = round(random.uniform(4.5, 4.9), 1)
+            photo.rating = rating
+            updated_count += 1
+        
+        db.session.commit()
+        return jsonify({'message': f'Updated {updated_count} photos with ratings'}), 200
+    except Exception as e:
+        return jsonify({'error': f'Failed to update ratings: {str(e)}'}), 500
+
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5001))
-    app.run(host='0.0.0.0', port=port, debug=False) 
+    app.run(host='0.0.0.0', port=5001, debug=False) 

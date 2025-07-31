@@ -69,42 +69,56 @@ export const moodboardService = {
   },
 
   async getMoodboard(id: number) {
-    // Return sample moodboard with items
-    const sampleItems = [
-      {
-        id: 1,
-        image_url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
-        caption: 'Peaceful pier view',
-        vibes: ['nature', 'peaceful', 'calm'],
-        position_x: 100,
-        position_y: 50,
-        width: 200,
-        height: 150,
-        created_at: '2024-01-15T10:30:00Z'
-      },
-      {
-        id: 2,
-        image_url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400',
-        caption: 'Urban cityscape',
-        vibes: ['urban', 'modern', 'city'],
-        position_x: 350,
-        position_y: 100,
-        width: 180,
-        height: 120,
-        created_at: '2024-01-15T11:00:00Z'
-      }
-    ];
+    // For existing sample moodboards (1, 2, 3), return sample data
+    if (id <= 3) {
+      const sampleItems = [
+        {
+          id: 1,
+          image_url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+          caption: 'Peaceful pier view',
+          vibes: ['nature', 'peaceful', 'calm'],
+          position_x: 100,
+          position_y: 50,
+          width: 200,
+          height: 150,
+          created_at: '2024-01-15T10:30:00Z'
+        },
+        {
+          id: 2,
+          image_url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400',
+          caption: 'Urban cityscape',
+          vibes: ['urban', 'modern', 'city'],
+          position_x: 350,
+          position_y: 100,
+          width: 180,
+          height: 120,
+          created_at: '2024-01-15T11:00:00Z'
+        }
+      ];
 
+      return {
+        id: id,
+        name: id === 1 ? 'Nature Vibes' : id === 2 ? 'Urban Photography' : 'Vintage Aesthetic',
+        description: id === 1 ? 'A collection of natural landscapes and outdoor photography' : 
+                    id === 2 ? 'Cityscapes and urban architecture' : 'Retro and nostalgic photo collections',
+        theme: id === 1 ? 'nature' : id === 2 ? 'urban' : 'vintage',
+        created_at: '2024-01-15T10:30:00Z',
+        updated_at: '2024-01-15T10:30:00Z',
+        is_public: true,
+        items: sampleItems
+      };
+    }
+    
+    // For new moodboards (id > 3), return empty moodboard
     return {
       id: id,
-      name: id === 1 ? 'Nature Vibes' : id === 2 ? 'Urban Photography' : 'Vintage Aesthetic',
-      description: id === 1 ? 'A collection of natural landscapes and outdoor photography' : 
-                  id === 2 ? 'Cityscapes and urban architecture' : 'Retro and nostalgic photo collections',
-      theme: id === 1 ? 'nature' : id === 2 ? 'urban' : 'vintage',
-      created_at: '2024-01-15T10:30:00Z',
-      updated_at: '2024-01-15T10:30:00Z',
-      is_public: true,
-      items: sampleItems
+      name: `Moodboard ${id}`,
+      description: '',
+      theme: '',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      is_public: false,
+      items: []
     };
   },
 
