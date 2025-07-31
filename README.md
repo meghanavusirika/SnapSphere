@@ -1,42 +1,22 @@
 # 📸 SnapSphere – AI-Powered Photo Spot Discovery & Creative Suite
 
-SnapSphere is a creative map exploration platform built for photographers, content creators, and explorers. Powered by AI and geospatial APIs, it helps you discover photo-worthy locations based on mood, aesthetics, and real-time conditions — not just reviews or popularity.
+SnapSphere is a creative map exploration platform built for photographers, content creators, and explorers. Powered by AI, ggogle maps API and geospatial APIs, it helps you discover photo-worthy locations based on mood, aesthetics, and real-time conditions — not just reviews or popularity.
 
-## 🌐 Live Demo
+## 🌐 Video Demo
 🔗 [Coming Soon]
 
 ## 🖼️ Preview
-SnapSphere Interface (Insert screenshots/gif here)
+![Home_Page](https://github.com/user-attachments/assets/5be83121-4e9d-4b17-80a6-46a0d88f77e6)
+![VibeMap](https://github.com/user-attachments/assets/3305ab80-9797-415a-99b8-0a18f6d0d067)
 
 ## ✨ Features
 
-### 🗺️ Smart Location Discovery
-- **AI-Powered Geocoding**: Converts coordinates into real-world addresses using Nominatim.
-- **Mapillary Integration**: Pulls street-level imagery for undiscovered photo spots.
-- **Proximity Search**: Finds nearby spots based on your current location.
-- **Vibe-Based Filtering**: Search by aesthetic mood like "dreamy," "urban," or "sunset nostalgia."
-
-### 🤖 AI Creative Suite
-- **Vibe Analysis**: Uses CLIP (by OpenAI) to detect mood from uploaded images.
-- **Smart Captions**: Generates Instagram-ready captions (casual, professional, poetic).
-- **Color Palette Extraction**: Pulls color schemes from images for visual planning.
-- **Style Tagging**: Categorizes images by themes and artistic style.
-
-### 📱 Moodboard Management
-- **Create & Organize**: Drag and drop moodboards by theme or project.
-- **Smart Suggestions**: AI-recommended spots based on saved images.
-- **Public/Private Sharing**: Control visibility and collaborate with others.
-
-### 🎯 Smart Recommendations
-- **Context-Aware Suggestions**: Recommends photo spots based on time of day, weather, and light.
-- **Golden Hour Alerts**: Notify users when lighting is perfect.
-- **Safe Route Planning**: Choose safer paths for late shoots or unknown areas.
-- **Holder Hour Notifications**: Let users know when locations are most and least crowded.
-
-### 👤 User Management
-- **Secure Auth**: JWT-based authentication for seamless sign-up/login.
-- **Personal Profiles**: Save preferences, moodboards, and submitted spots.
-- **User Submissions**: Share and discover hidden gems contributed by the community.
+- 🗺️ **VibeMap**: Explore photo spots on an interactive map filtered by aesthetic vibes
+- 🎨 **Moodboards**: Plan shoots or save favorite locations with customizable moodboards
+- 📍 **Community Photo Spots**: Discover and submit hidden gems shared by other explorers
+- 🎯 **Vibe Detection**: Upload any photo to get an AI-powered vibe analysis
+- 🔍 **Smart Recommendations**: Get location-based spot suggestions using weather, time, and vibe data
+- 💬 **Caption Generator**: Generate aesthetic, share-ready captions based on your photos
 
 ## 🛠️ Tech Stack
 - **Frontend**: React + TypeScript, Tailwind CSS, Mapbox GL JS
@@ -166,14 +146,11 @@ npm start
 5. Submit a pull request
 
 ## 👥 Contributors – SpurHacks 2025
-- **@v.v.meghanareddy** – Project Lead & Full Stack Dev
-- **@JordanKing22** – Backend Architecture & AI Integration
-- **@meghanavusirika** – Frontend Dev & UI/UX
-- **@manahilbashir** – Creative Strategy & User Experience
-- **@PritNotPrinter** – AI/ML Integration & Technical Lead
+- **@meghanavusirika** – Project Lead & Full-Stack Developer (built VibeMap, Community Photo Spots, Smart Recommendations, Caption Generator, and overall integration)
+- **@advitiya6594** – Full-Stack Developer (worked on Vibe Classification and Moodboards)
 
 ## 📄 License
-MIT License – See LICENSE file
+MIT License
 
 ## 🚀 Future Enhancements
 - Mobile App (iOS + Android)
