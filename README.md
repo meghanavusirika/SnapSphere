@@ -2,13 +2,16 @@
 
 SnapSphere is a creative map exploration platform built for photographers, content creators, and explorers. Powered by AI, ggogle maps API and geospatial APIs, it helps you discover photo-worthy locations based on mood, aesthetics, and real-time conditions — not just reviews or popularity.
 
+
 ## 🌐 Video Demo
 Check out the video demo here:
 🔗 https://www.youtube.com/watch?v=AHVn8Na7S4w
 
+
 ## 🖼️ Preview
 ![Home_Page](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/Screenshot%202025-07-31%20at%204.49.02%20PM.png)
 ![VibeMap](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/Screenshot%202025-07-31%20at%203.01.37%20PM.png)
+
 
 ## ✨ Features
 
@@ -19,6 +22,7 @@ Check out the video demo here:
 - 🔍 **Smart Recommendations**: Get location-based spot suggestions using weather, time, and vibe data
 - 💬 **Caption Generator**: Generate aesthetic, share-ready captions based on your photos
 
+
 ## 🛠️ Tech Stack
 - **Frontend**: React + TypeScript, Tailwind CSS, Mapbox GL JS
 - **Backend**: Python Flask, SQLAlchemy, SQLite
@@ -26,6 +30,7 @@ Check out the video demo here:
 - **Maps & Location**: Mapillary API, Nominatim Geocoding, Google Maps APIs
 - **Authentication**: JWT, Werkzeug Security
 - **Image Processing**: Pillow (PIL), CLIP Processor
+
 
 ## ⚙️ Local Setup Instructions
 
@@ -93,6 +98,7 @@ npm start
 ### 5. Open the App
 👉 http://localhost:3000
 
+
 ## 🏗️ Architecture Overview
 
 ### 🧠 AI/ML Pipeline
@@ -139,6 +145,7 @@ npm start
 - `GET /moodboards/<id>`
 - `POST /moodboards/<id>/items`
 
+
 ## 🤝 Contributing
 1. Fork the repo
 2. Create your branch (`git checkout -b feature/AmazingFeature`)
@@ -146,12 +153,15 @@ npm start
 4. Test everything
 5. Submit a pull request
 
+
 ## 👥 Contributors – SpurHacks 2025
 - **@meghanavusirika** – Project Lead & Full-Stack Developer (built VibeMap, Community Photo Spots, Smart Recommendations, Caption Generator, and overall integration)
 - **@advitiya6594** – Full-Stack Developer (worked on Vibe Classification and Moodboards)
 
+
 ## 📄 License
 MIT License
+
 
 ## 🚀 Future Enhancements
 - Mobile App (iOS + Android)
