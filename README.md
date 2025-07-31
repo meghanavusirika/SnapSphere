@@ -7,7 +7,7 @@ Check out the video demo here:
 🔗 https://www.youtube.com/watch?v=AHVn8Na7S4w
 
 ## 🖼️ Preview
-![Home_Page](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/HomePage.png)
+![Home_Page](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/Screenshot%202025-07-31%20at%204.49.02%20PM.png)
 ![VibeMap](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/Screenshot%202025-07-31%20at%203.01.37%20PM.png)
 
 ## ✨ Features
