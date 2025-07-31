@@ -1,235 +1,184 @@
-# SnapSphere - AI-Powered Photo Spot Discovery & Creative Suite
+# 📸 SnapSphere – AI-Powered Photo Spot Discovery & Creative Suite
 
-A comprehensive photo spot discovery and creative management platform that combines AI-powered location intelligence with advanced creative tools for photographers and content creators.
+SnapSphere is a creative map exploration platform built for photographers, content creators, and explorers. Powered by AI and geospatial APIs, it helps you discover photo-worthy locations based on mood, aesthetics, and real-time conditions — not just reviews or popularity.
 
-🌐 **Live Demo**  
-Check out the deployed application: 🔗 [Coming Soon]
+## 🌐 Live Demo
+🔗 [Coming Soon]
 
-## 📸 Preview
-![SnapSphere Interface](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=SnapSphere+Interface)
+## 🖼️ Preview
+SnapSphere Interface (Insert screenshots/gif here)
 
 ## ✨ Features
 
-### 🗺️ **Smart Location Discovery**
-- **AI-Powered Geocoding**: Automatic place name detection using Nominatim
-- **Mapillary Integration**: Real-time photo spot discovery from street-level imagery
-- **Proximity Search**: Find photo spots within customizable radius
-- **Vibe-Based Filtering**: Filter locations by mood and aesthetic
+### 🗺️ Smart Location Discovery
+- **AI-Powered Geocoding**: Converts coordinates into real-world addresses using Nominatim.
+- **Mapillary Integration**: Pulls street-level imagery for undiscovered photo spots.
+- **Proximity Search**: Finds nearby spots based on your current location.
+- **Vibe-Based Filtering**: Search by aesthetic mood like "dreamy," "urban," or "sunset nostalgia."
 
-### 🤖 **AI Creative Suite**
-- **Vibe Analysis**: CLIP-powered image analysis for mood detection
-- **Smart Captions**: AI-generated captions with multiple styles (casual, professional, creative)
-- **Color Palette Extraction**: Automatic color scheme detection from images
-- **Style Tagging**: Intelligent categorization of photo aesthetics
+### 🤖 AI Creative Suite
+- **Vibe Analysis**: Uses CLIP (by OpenAI) to detect mood from uploaded images.
+- **Smart Captions**: Generates Instagram-ready captions (casual, professional, poetic).
+- **Color Palette Extraction**: Pulls color schemes from images for visual planning.
+- **Style Tagging**: Categorizes images by themes and artistic style.
 
-### 📱 **Moodboard Management**
-- **Visual Collections**: Create and organize photo collections by theme
-- **Drag & Drop Interface**: Intuitive moodboard creation
-- **Public/Private Sharing**: Control visibility of your creative collections
-- **AI-Enhanced Curation**: Smart suggestions for moodboard items
+### 📱 Moodboard Management
+- **Create & Organize**: Drag and drop moodboards by theme or project.
+- **Smart Suggestions**: AI-recommended spots based on saved images.
+- **Public/Private Sharing**: Control visibility and collaborate with others.
 
-### 🎯 **Smart Recommendations**
-- **Location-Based Suggestions**: Personalized photo spots based on your location
-- **Weather-Aware Recommendations**: Optimal shooting conditions and timing
-- **Crowd Level Intelligence**: Know when spots are least crowded
-- **Golden Hour Alerts**: Perfect timing for magical lighting
+### 🎯 Smart Recommendations
+- **Context-Aware Suggestions**: Recommends photo spots based on time of day, weather, and light.
+- **Golden Hour Alerts**: Notify users when lighting is perfect.
+- **Safe Route Planning**: Choose safer paths for late shoots or unknown areas.
+- **Holder Hour Notifications**: Let users know when locations are most and least crowded.
 
-### 🔐 **User Management**
-- **Secure Authentication**: JWT-based user authentication
-- **Personal Profiles**: User-specific collections and preferences
-- **Activity Tracking**: Monitor your photography journey
+### 👤 User Management
+- **Secure Auth**: JWT-based authentication for seamless sign-up/login.
+- **Personal Profiles**: Save preferences, moodboards, and submitted spots.
+- **User Submissions**: Share and discover hidden gems contributed by the community.
 
 ## 🛠️ Tech Stack
-
-**Frontend**: React + TypeScript, Tailwind CSS, Mapbox GL JS  
-**Backend**: Python Flask, SQLAlchemy, SQLite  
-**AI/ML**: CLIP (OpenAI), PyTorch, Transformers  
-**Maps & Location**: Mapillary API, Nominatim Geocoding  
-**Authentication**: JWT, Werkzeug Security  
-**Image Processing**: Pillow (PIL), CLIP Processor  
+- **Frontend**: React + TypeScript, Tailwind CSS, Mapbox GL JS
+- **Backend**: Python Flask, SQLAlchemy, SQLite
+- **AI/ML**: CLIP (OpenAI), PyTorch, Transformers
+- **Maps & Location**: Mapillary API, Nominatim Geocoding, Google Maps APIs
+- **Authentication**: JWT, Werkzeug Security
+- **Image Processing**: Pillow (PIL), CLIP Processor
 
 ## ⚙️ Local Setup Instructions
 
-The steps below are for developers who want to run SnapSphere locally for development or contribution purposes.
-
 ### 1. Environment Variables
-
-Copy the example environment file and configure your secrets:
-
 ```bash
 cp env.example .env
 ```
 
-Edit the `.env` file with your actual credentials:
+Edit `.env` with your credentials:
 
-```env
-# Flask Configuration
+```dotenv
 FLASK_SECRET_KEY=your_super_secret_key_here
-FLASK_ENV=development
-
-# Mapillary API Configuration (for street-level photos)
 MAPILLARY_CLIENT_ID=your_mapillary_client_id
 MAPILLARY_ACCESS_TOKEN=your_mapillary_access_token
-
-# Server Configuration
 FLASK_PORT=5001
 FLASK_DEBUG=True
-
-# Database Configuration
 DATABASE_URL=sqlite:///photos.db
 ```
 
 ### 2. Get API Keys
 
-#### Mapillary API (Street-Level Photos)
-1. Sign up at [Mapillary](https://www.mapillary.com/developers)
-2. Create a new application
-3. Get your Client ID and Access Token
-4. Add to `MAPILLARY_CLIENT_ID` and `MAPILLARY_ACCESS_TOKEN`
+#### 🧭 Mapillary
+1. Sign up at [Mapillary](https://www.mapillary.com/)
+2. Create an app and get your Client ID and Access Token
 
-#### Google Maps API (Optional - for enhanced mapping)
+#### 🗺️ Google Maps (Optional)
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing one
-3. Enable Maps JavaScript API
-4. Create credentials and add to your frontend configuration
+2. Enable:
+   - Maps JavaScript API
+   - Geocoding API
+3. Generate API key and add to your frontend config
 
 ### 3. Installation
 
-#### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- pip (Python package manager)
-
-#### Backend Setup
+#### 🐍 Backend
 ```bash
-# Navigate to backend directory
 cd ai-backend
-
-# Create virtual environment
 python3 -m venv venv
-
-# Activate virtual environment
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install Python dependencies
 pip install -r requirements.txt
-
-# Initialize database
 python -c "from app import app, db; app.app_context().push(); db.create_all()"
 ```
 
-#### Frontend Setup
+#### 🧩 Frontend
 ```bash
-# Navigate to project root
 cd ..
-
-# Install frontend dependencies
 npm install
-
-# Build the application
 npm run build
 ```
 
-### 4. Running the Application
+### 4. Running the App
 
-#### Terminal 1 - Backend Server (Port 5001)
+**Terminal 1 – Backend**
 ```bash
 cd ai-backend
 source venv/bin/activate
 python app.py
 ```
 
-#### Terminal 2 - Frontend Development Server (Port 3000)
+**Terminal 2 – Frontend**
 ```bash
 npm start
 ```
 
-### 5. Access the Application
+### 5. Open the App
+👉 http://localhost:3000
 
-Open your browser to: `http://localhost:3000`
+## 🏗️ Architecture Overview
 
-## 🏗️ Architecture
+### 🧠 AI/ML Pipeline
+- **CLIP**: For vibe classification
+- **Caption Generator**: Custom templates
+- **Color Extraction**: Extracts palette from photo
+- **Smart Recommender**: Time/weather/place-aware
 
-### Backend Services
-- **Main API Server**: Flask application on port 5001
-- **AI Processing**: CLIP model for image analysis and vibe detection
-- **Database**: SQLite with SQLAlchemy ORM
-- **Authentication**: JWT-based user management
+### ⚙️ Backend (Flask)
+- AI processing
+- API endpoints
+- User auth & DB operations
 
-### Frontend Components
-- **React App**: TypeScript-based frontend on port 3000
-- **Map Integration**: Mapbox GL JS for interactive mapping
-- **State Management**: React Context for global state
-- **UI Framework**: Tailwind CSS for styling
+### 🎨 Frontend (React)
+- Mapbox + custom layers
+- Moodboard UI
+- Vibe filtering system
 
-### AI/ML Pipeline
-- **Image Analysis**: CLIP model for vibe classification
-- **Caption Generation**: Template-based AI caption creation
-- **Color Extraction**: Automated color palette detection
-- **Recommendation Engine**: Location and preference-based suggestions
-
-## 🔒 Security Notes
-
-⚠️ **Important**: Never commit the `.env` file to version control. It contains sensitive API keys and database credentials.
-
-The `.env` file is already included in `.gitignore` to prevent accidental commits.
+## 🔐 Security Notes
+⚠️ **Don't commit .env to GitHub**. It contains sensitive credentials.
+`.gitignore` already excludes it.
 
 ## 📊 API Endpoints
 
-### Authentication
-- `POST /register` - User registration
-- `POST /login` - User authentication
-- `GET /me` - Get user profile
+### 🔐 Auth
+- `POST /register`
+- `POST /login`
+- `GET /me`
 
-### Photo Spots
-- `GET /photos_nearby` - Find nearby photo spots
-- `POST /add_photo` - Add new photo spot
-- `POST /fetch_mapillary_photos` - Import from Mapillary
-- `POST /place_details` - Get location details
+### 📍 Photos
+- `GET /photos_nearby`
+- `POST /add_photo`
+- `POST /fetch_mapillary_photos`
+- `POST /place_details`
 
-### AI Features
-- `POST /analyze_vibe` - Analyze image vibes
-- `POST /generate_caption` - Generate AI captions
-- `POST /smart_recommendations` - Get personalized recommendations
+### 🧠 AI Tools
+- `POST /analyze_vibe`
+- `POST /generate_caption`
+- `POST /smart_recommendations`
 
-### Moodboards
-- `GET /moodboards` - Get user moodboards
-- `POST /moodboards` - Create new moodboard
-- `GET /moodboards/<id>` - Get specific moodboard
-- `POST /moodboards/<id>/items` - Add item to moodboard
+### 📁 Moodboards
+- `GET /moodboards`
+- `POST /moodboards`
+- `GET /moodboards/<id>`
+- `POST /moodboards/<id>/items`
 
 ## 🤝 Contributing
+1. Fork the repo
+2. Create your branch (`git checkout -b feature/AmazingFeature`)
+3. Add your own `.env` (never commit it!)
+4. Test everything
+5. Submit a pull request
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Make sure to add your own `.env` file (never commit it)
-4. Test your changes thoroughly
-5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-6. Push to the branch (`git push origin feature/AmazingFeature`)
-7. Open a Pull Request
-
-## 👥 Contributors
-
-**SnapSphere Team for Spurhacks 2025**
-- **@v.v.meghanareddy** – Project Lead & Full-Stack Development
+## 👥 Contributors – SpurHacks 2025
+- **@v.v.meghanareddy** – Project Lead & Full Stack Dev
 - **@JordanKing22** – Backend Architecture & AI Integration
-- **@meghanavusirika** – Frontend Development & UI/UX Design
-- **@manahilbashir** – Creative Direction & User Experience
-- **@PritNotPrinter** – AI/ML Implementation & Technical Lead
+- **@meghanavusirika** – Frontend Dev & UI/UX
+- **@manahilbashir** – Creative Strategy & User Experience
+- **@PritNotPrinter** – AI/ML Integration & Technical Lead
 
 ## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License – See LICENSE file
 
 ## 🚀 Future Enhancements
-
-- **Real-time Collaboration**: Multi-user moodboard editing
-- **Advanced AI Models**: Integration with GPT-4 for enhanced captions
-- **Social Features**: Photo spot reviews and ratings
-- **Mobile App**: Native iOS and Android applications
-- **AR Integration**: Augmented reality photo spot discovery
-- **Weather Integration**: Real-time weather-based recommendations
-
----
-
-**Built with ❤️ for the photography community** 
+- Mobile App (iOS + Android)
+- GPT-powered Smart Captions
+- Real-Time Moodboard Collaboration
+- AR Photo Spot Discovery
+- Social Reviews & Ratings
+- Public Vibe Trails 
