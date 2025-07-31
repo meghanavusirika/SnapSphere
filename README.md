@@ -6,8 +6,8 @@ SnapSphere is a creative map exploration platform built for photographers, conte
 🔗 [Coming Soon]
 
 ## 🖼️ Preview
-![Home_Page](https://github.com/user-attachments/assets/5be83121-4e9d-4b17-80a6-46a0d88f77e6)
-![VibeMap](https://github.com/user-attachments/assets/3305ab80-9797-415a-99b8-0a18f6d0d067)
+![Home_Page](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/HomePage.png)
+![VibeMap](https://github.com/meghanavusirika/SnapSphere/blob/main/Images/Screenshot%202025-07-31%20at%203.01.37%20PM.png)
 
 ## ✨ Features
 
